@@ -5,6 +5,7 @@ import sort_table.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private static List<Client> clientList = new ArrayList<>();
@@ -133,42 +134,68 @@ public class Main {
             return;
         }
         for (int i = 0; i < clientList.size(); i++) {
+            String roomTypeNeed = clientList.get(i).getRoomTypeNeed();
+            int roomNumberNeed = clientList.get(i).getRoomNumberNeed();
             System.out.println("-----------Sắp xếp phòng cho khách hàng: " + clientList.get(i).getName() + "------------");
-            System.out.println("Loại phòng khách hàng muốn thuê: " + clientList.get(i).getRoomTypeNeed());
-            System.out.println("Số phòng khách hàng muốn thuê: " + clientList.get(i).getRoomNumberNeed());
+            System.out.println("Loại phòng khách hàng muốn thuê: " + roomTypeNeed);
+            System.out.println("Số phòng khách hàng muốn thuê: " + roomNumberNeed);
 
-            List<Room> roomType = new ArrayList<>();
+//            List<Room> roomType = new ArrayList<>();
+//
+//            for (int j = 0; j < roomList.size(); j++) {
+//                if (roomList.get(j).getRoomType().equals(clientList.get(i).getRoomTypeNeed())) {
+//                    roomType.add(roomList.get(j));
+//                }
+//            }
 
-            for (int j = 0; j < roomList.size(); j++) {
-                if (roomList.get(j).getRoomType().equals(clientList.get(i).getRoomTypeNeed())) {
-                    roomType.add(roomList.get(j));
-                }
+            List<Room> roomType = roomList.stream().filter(room -> room.getRoomType().equals(roomTypeNeed)).collect(Collectors.toList());
+
+            roomType = roomType.stream().filter(room -> {
+                List<Sort> sortList1 = sortList.stream().filter(s -> {
+                    List<Room> rooms = s.getRooms();
+                    List<Room> collect = rooms.stream().filter(r -> r.getId() == room.getId()).collect(Collectors.toList());
+                    return !collect.isEmpty();
+                }).collect(Collectors.toList());
+                return !sortList1.isEmpty();
+            }).collect(Collectors.toList());
+
+
+            if (roomType.isEmpty()) {
+                // không còn phòng nào trống có kiểu mà khách hàng muốn --> đề nghị chọn lại kiểu phòng khác
             }
-            for (Room room : roomType) {
-                System.out.println(room);
-                if (clientList.get(i).getRoomNumberNeed() < roomType.get(0).getRoomNumber()) {
-                    System.out.println("Nhập số lượng ngày khách hàng muốn thuê: ");
-                    do {
-                        int day;
-                        try {
-                            day = new Scanner(System.in).nextInt();
-                            check = true;
-                        } catch (Exception e) {
-                            System.out.println("Không được nhập ký tự khác ngoài số! Nhập lại: ");
-                            check = false;
-                            continue;
-                        }
-                        if (day < 0) {
-                            System.out.print("Số lượng ngày không được nhỏ hơn 0! Nhập lại: ");
-                            check = false;
-                        }
-                    } while (!check);
-                }
-                else{
-                    System.out.println("Số phòng không đủ! Chọn loại phòng khác: ");
 
-                }
+            if (roomType.size() < roomNumberNeed) {
+                // số phòng trống có kiểu mà khách hàng muốn không đủ cho khách hàng thuê --> đề nghị chọn lại kiểu phòng khác
             }
+
+            // lấy  phòng cần thuê cho khách (random) tron roomType
+            // bắt khách hàng nhập số ngày muốn thuê
+
+
+//            for (Room room : roomType) {
+//                System.out.println(room);
+//                if (clientList.get(i).getRoomNumberNeed() < roomType.get(0).getRoomNumber()) {
+//                    System.out.println("Nhập số lượng ngày khách hàng muốn thuê: ");
+//                    do {
+//                        int day;
+//                        try {
+//                            day = new Scanner(System.in).nextInt();
+//                            check = true;
+//                        } catch (Exception e) {
+//                            System.out.println("Không được nhập ký tự khác ngoài số! Nhập lại: ");
+//                            check = false;
+//                            continue;
+//                        }
+//                        if (day < 0) {
+//                            System.out.print("Số lượng ngày không được nhỏ hơn 0! Nhập lại: ");
+//                            check = false;
+//                        }
+//                    } while (!check);
+//                } else {
+//                    System.out.println("Số phòng không đủ! Chọn loại phòng khác: ");
+//
+//                }
+//            }
         }
     }
 }

@@ -3,21 +3,20 @@ package sort_table;
 import entity.Client;
 import entity.Room;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Sort {
     private Client client;
-    private String roomType;
+    private List<Room> rooms;
     private int roomTotal;
     private int day;
 
     public Sort() {
     }
 
-    public Sort(Client client, String roomType, int roomTotal, int day) {
+    public Sort(Client client, List<Room> rooms, int roomTotal, int day) {
         this.client = client;
-        this.roomType = roomType;
+        this.rooms = rooms;
         this.roomTotal = roomTotal;
         this.day = day;
     }
@@ -30,13 +29,12 @@ public class Sort {
         this.client = client;
     }
 
-
-    public String getRoomType() {
-        return roomType;
+    public List<Room> getRooms() {
+        return rooms;
     }
 
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 
     public int getRoomTotal() {
@@ -53,15 +51,5 @@ public class Sort {
 
     public void setDay(int day) {
         this.day = day;
-    }
-
-    @Override
-    public String toString() {
-        return "Sort{" +
-                "client=" + client +
-                ", roomType='" + roomType + '\'' +
-                ", roomTotal=" + roomTotal +
-                ", day=" + day +
-                '}';
     }
 }
